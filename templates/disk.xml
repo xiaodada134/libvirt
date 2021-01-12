@@ -1,0 +1,8 @@
+<!--
+<disk type='file' device='disk'>
+  <driver name='qemu' type='qcow2'/>
+  <source file='xxx'>
+  <backingStore>
+  <target='dev' bus='virtio'>
+</disk>
+-->

@@ -1,0 +1,6 @@
+<vcpu placement='static'><%= @nr_cpu %></vcpu>
+<cpu mode='host-passthrough' check='none'>
+  <!--
+  <topology cores="2" sockets="4" threads="1" />
+  -->
+</cpu>
