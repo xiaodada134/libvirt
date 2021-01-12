@@ -31,7 +31,10 @@ class Testbox < Base
 		
 	private def load_file(url)
 		system "wget --timestamping -a wget.log --progress=bar:force #{url}"
-		File.realpath(File.basename(url))
+		basename = File.basename(url)
+		file_info = %x(ls -l "#{basename}").chomp
+		@logger.info("FILE-#{basename.ljust(30)}: #{file_info}")
+		File.realpath(basename)
 	end
 
 	private def set_kernel_path
@@ -53,6 +56,7 @@ class Testbox < Base
 		end
 		merge_initrd_file(initrds_path, 'initrd')
 		@initrd = File.realpath('initrd')
+
 		@logger.info("initrd_path: #{@initrd}")
 	end
 

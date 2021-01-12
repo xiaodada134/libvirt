@@ -37,7 +37,7 @@ class Templates < Base
 	end
 
 	
-	def final_template
+	def get_final_template
 		if !@job.templates.nil? && @job.templates.key?('domain')
 			@logger.debug("user define a domain.xml")
 			user_domain
@@ -53,8 +53,9 @@ class Templates < Base
 		end
 		File.realpath('domain.xml')
 	end
+	
 	# user have not define domain.xml use default
-	def default_domain
+	private def default_domain
 		set_domain @@default_templates['domain']
 		set_cpu
 		set_clock
@@ -69,15 +70,15 @@ class Templates < Base
 	end
 
 	# user have been define domaix.xml at LKP_SRC/hosts/
-	def user_domain
+	private def user_domain
 		# only support from local
 		set_domain "#{@@USER_DIR}/#{@job.templates['domain']}"
 		@logger.debug("user's templates at #{@@USER_DIR}/#{@job.templates['domain']}")
 		set_common
 	end
 
-	def set_common
-		# each job this element must be use default
+	private def set_common
+		# each job these elements must be use default
 		set_name
 		set_memory
 		set_os
@@ -86,59 +87,58 @@ class Templates < Base
 		set_on_active
 	end
 
-	def set_domain(file)
+	private def set_domain(file)
 		@doc = Nokogiri::XML(@job.bind(file))
 	end
 
-	def set_name
+	private def set_name
 		@doc.xpath('//domain/name').remove
 		@doc.root.add_child @job.bind(@@default_templates['name'])
 	end
 
-	def set_memory
+	private def set_memory
 		@doc.xpath('//domain/memory').remove
 		@doc.xpath('//domain/currentMemory').remove
 		@doc.xpath('//domain/maxMemory').remove
 		@doc.root.add_child @job.bind(@@default_templates['memory'])
 	end
 
-	def set_os
+	private def set_os
 		@doc.xpath('//domain/os').remove
 		@doc.root.add_child @job.bind(@@default_templates['os'])
 	end
 	
-	def set_interface
+	private def set_interface
 		@doc.xpath('//domain/devices/interface').remove
 		@doc.xpath('//domain/devices')[0].add_child @job.bind(@@default_templates['interface'])
 	end
 
-	def set_cpu
+	private def set_cpu
 		@doc.root.add_child @job.bind(@@default_templates['cpu'])
 	end
 
-	def set_clock
+	private def set_clock
 		@doc.root.add_child @job.bind(@@default_templates['clock'])
 	end
 
-	def set_on_active
+	private def set_on_active
 		@doc.xpath('//domain/on_poweroff').remove
 		@doc.xpath('//domain/on_reboot').remove
 		@doc.xpath('//domain/on_crash').remove
 		@doc.root.add_child @job.bind(@@default_templates['on_active'])
 	end
 
-	def set_devices
+	private def set_devices
 		@doc.root.add_child @job.bind(@@default_templates['devices'])
 	end
 
-	def set_serial
+	private def set_serial
 		# default serial can redirect vm log to a file
 		@doc.xpath('//domain/devices/serial').remove
 		@doc.xpath('//domain/devices')[0].add_child @job.bind(@@default_templates['serial'])
 	end
 
-	def set_seclabel
+	private def set_seclabel
 		@doc.root.add_child @job.bind(@@default_templates['seclabel'])
 	end
-
 end

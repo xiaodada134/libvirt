@@ -9,14 +9,8 @@ class LibvirtConnect < Base
 	end
 
 	def create(xml)
-		begin
-			@dom = @conn.define_domain_xml(File.read(xml))
-		rescue Exception => e
-			@logger.error(e.message)
-			raise 'libvirt define error'
-		end
+		@dom = @conn.define_domain_xml(File.read(xml))
 		@dom.create
-		@logger.info(@dom.info)
 	end
 
 	def wait

@@ -29,11 +29,11 @@ class Client < Base
 	
 	def request_job
 		url = "http://#{@sched_host}:#{@sched_port}/boot.libvirt/mac/#{@mac}"
-		@logger.info("url: #{url}")
+		@logger.info("Request URL: #{url}")
 		res = %x(curl #{url})
 		if res.empty?
-			@logger.error('can not connect scheduler')
-			raise 'can not connect scheduler'
+			@logger.error('Can not connect scheduler')
+			raise 'Can not connect scheduler'
 		end
 		JSON.parse(res)
 	end
@@ -46,7 +46,6 @@ class Client < Base
 		defaults = relevant_defaults(names)
 		@sched_host = defaults['SCHED_HOST'] || '172.17.0.1'
 		@sched_port = defaults['SCHED_PORT'] || 3000
-		# outputting information to log files
 		@logger.info("SCHED_HOST: #{@sched_host}")
 		@logger.info("SCHED_PORT: #{@sched_port}")
 	end
@@ -54,7 +53,7 @@ class Client < Base
 	private def get_mac_from_hostname(hostname)
 		cmd = %Q(echo #{hostname} | md5sum | sed "s/^\\(..\\)\\(..\\)\\(..\\)\\(..\\)\\(..\\).*$/0a-\\1-\\2-\\3-\\4-\\5/")
 		@mac = %x(#{cmd}).chomp
-		@logger.info("mac: #{@mac}")
+		@logger.info("Mac address: #{@mac}")
 	end
 
 	private def set_host_info

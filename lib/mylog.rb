@@ -4,6 +4,7 @@ require 'logger'
 
 class Mylog < Logger
 	def initialize(filename)
+		@name = filename
 		super(filename)
 		self.datetime_format = '%Y-%m-%d %H:%M:%s'
 		self.formatter = proc do |severity, datetime, progname, msg|
@@ -12,6 +13,6 @@ class Mylog < Logger
 	end
 
 	def name
-		@filename
+		@name
 	end
 end

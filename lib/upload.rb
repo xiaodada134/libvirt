@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class Upload
+require_relative 'base'
+
+class Upload < Base
 	def initialize(job, logger)
 		@job = job
 		@host = job.LKP_SERVER 
@@ -15,7 +17,7 @@ class Upload
 		@logger.debug("result_url: #{@result_url}")
 	end
 	
-	def upload_rename_file(file)
+	def upload_qemu_log(file)
 		system "cp #{file} libvirt.log"
 		system "curl -sSf -T libvirt.log #{@result_url}/ --cookie 'JOBID= #{@job.job_id}'"
 	end
