@@ -6,6 +6,8 @@ yum install -y  edk2-aarch64.noarch
 gem install erb
 yum install -y zlib-devel.aarch64
 gem install nokogiri 
+yum install -y libvirt-devel.aarch64
+gem install ruby-libvirt
 ```
 
 # how to use
