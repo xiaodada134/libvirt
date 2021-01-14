@@ -36,6 +36,8 @@ class Templates < Base
 		@job = job
 	end
 
+	def create_domain
+	end
 	
 	def get_final_template
 		if !@job.templates.nil? && @job.templates.key?('domain')

@@ -8,26 +8,24 @@ require_relative "#{ENV['CCI_SRC']}/container/defconfig"
 
 
 # configuration information of the test device
-class Client < Base
-	LKP_SRC = "#{ENV['LKP_SRC']}" || '/c/lkp-src'
-	
+class Consumer < Base
+	@@LKP_SRC = "#{ENV['LKP_SRC']}" || '/c/lkp-src'
+	attr_reader :hostname, :mac
+
 	def initialize(hostname, queues)
 		@hostname = hostname
 		@queues = queues
 	end
 
-	def connect	
-		get_mac_from_hostname(@hostname)
-		config_scheduler
-		set_host_info
-		host_exists
-	end
-	
 	def close
 		del_host_info
 	end
 	
 	def request_job
+		get_mac_from_hostname(@hostname)
+		config_scheduler
+		set_host_info
+		host_exists
 		url = "http://#{@sched_host}:#{@sched_port}/boot.libvirt/mac/#{@mac}"
 		@logger.info("Request URL: #{url}")
 		res = %x(curl #{url})
@@ -68,7 +66,7 @@ class Client < Base
 	
 	private def host_exists
 		@host = @hostname.split('.')[0]
-		host_file = "#{LKP_SRC}/hosts/#{@host}"
+		host_file = "#{@@LKP_SRC}/hosts/#{@host}"
 		unless FileTest.exists?(host_file)
 			@logger.error("#{@host} file not exist")
 			raise "#{@host} file not exist"

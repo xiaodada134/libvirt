@@ -1,0 +1,21 @@
+# if user not define domian, use default
+domain:
+        - domain
+
+# each domain.xml these elements will be replace by default
+common:
+        - name
+        - os
+        - memory
+        - serial
+        - interface
+        - active
+        - emulator
+
+# user-define
+user:
+        - cpu
+        - seclabel
+        - disk
+        - devices
+        - clock

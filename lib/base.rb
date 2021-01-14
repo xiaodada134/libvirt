@@ -26,5 +26,6 @@ class Base
 
 	def set_logger(logger)
 		@logger = logger
+		self
 	end
 end
