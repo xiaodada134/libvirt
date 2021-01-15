@@ -54,7 +54,7 @@ class Executor < Base
 
 	def set_kernel_path
 		@config.kernel = load_file(@config.kernel_uri)
-		@logger.info("Kernel_path: #{@kernel}")
+		@logger.info("Kernel_path: #{@config.kernel}")
 	end
 
 	def merge_initrd_file(file_list, target_name)
@@ -70,11 +70,11 @@ class Executor < Base
 		end
 		merge_initrd_file(initrds_path, 'initrd')
 		@config.initrd = File.realpath('initrd')
-		@logger.info("initrd_path: #{@initrd}")
+		@logger.info("initrd_path: #{@config.initrd}")
 	end
 
 	def set_kernel_parameter
 		@config.cmdline = @config.kernel_params
-		@logger.info("cmdline: #{@cmdline}")
+		@logger.info("cmdline: #{@config.cmdline}")
 	end
 end

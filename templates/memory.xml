@@ -1,1 +1,1 @@
-<memory unit='GiB'><%= @memory %></memory>
+<memory unit='GiB'><%= memory.to_i %></memory>

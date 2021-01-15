@@ -11,11 +11,13 @@ class LibvirtConnect < Base
 	def create(xml)
 		@dom = @conn.define_domain_xml(File.read(xml))
 		@dom.create
+		@upload.upload_qemu_log
 	end
 
 	def wait
 		loop do
 			sleep 10
+			@upload.upload_vm_log
 			unless @dom.active?
 				@logger.info("The job is completed")
 				break

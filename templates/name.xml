@@ -1,1 +1,1 @@
-<name><%= @job_id %></name>
+<name><%= job_id %></name>

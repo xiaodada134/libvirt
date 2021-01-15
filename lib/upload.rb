@@ -2,27 +2,36 @@
 
 require_relative 'base'
 
-class Upload < Base
-	def initialize(job, logger)
-		@job = job
-		@host = job.LKP_SERVER 
+class Upload
+	@@qemu_log_dir = '/var/log/libvirt/qemu'
+
+	def initialize(context, logger)
 		@logger = logger
-		# @port = job.RESULT_WEBDAV_POR
-		@port = 3080
+		@job_id = context.config.job_id
+		@boot_log_file = context.config.log_file
+		@result_root = context.config.result_root
+		@host   = context.config.LKP_SERVER
+		@port   = 3080
 		get_result_url
 	end
-
+	
 	private def get_result_url
-		@result_url = "http://#{@host}:#{@port}#{@job.result_root}"
-		@logger.debug("result_url: #{@result_url}")
+		@result_url = "http://#{@host}:#{@port}#{@result_root}"
+		@logger.info("Result_URL: #{@result_url}".center(150))
 	end
 	
-	def upload_qemu_log(file)
-		system "cp #{file} libvirt.log"
-		system "curl -sSf -T libvirt.log #{@result_url}/ --cookie 'JOBID= #{@job.job_id}'"
+	# /var/log/libvirt/qemu/xxx.log
+	def upload_qemu_log
+		system "curl -sSf -T #{@@qemu_log_dir}/#{@job_id}.log #{@result_url}/ --cookie 'JOBID= #{@job_id}'"
 	end
 
-	def upload_file_curl(file)
-		system "curl -sSf -T #{file} #{@result_url}/ --cookie 'JOBID= #{@job.job_id}'"
+	# vm start log
+	def upload_vm_log
+		system "curl -sSf -T #{@boot_log_file} #{@result_url}/ --cookie 'JOBID= #{@job_id}'"
+	end
+
+	# client log
+	def upload_client_log
+		system "curl -sSf -T #{@logger.name} #{@result_url}/ --cookie 'JOBID= #{@job_id}'"
 	end
 end

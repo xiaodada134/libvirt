@@ -2,7 +2,7 @@
 
 require 'erb'
 require_relative 'base'
-require_relative '/c/lkp-tests/lib/hashugar'
+require_relative 'hashugar'
 
 class Context < Base
 	attr_reader :config
@@ -15,9 +15,10 @@ class Context < Base
 		@config.merge!(hashugar)
 	end
 
-	def expand_erb(template, contest_hash={})
+	def expand_erb(template, context_hash={})
 		@config.merge!(context_hash) 
 		context = @config.instance_eval { binding }
 		ERB.new(template, nil, '%').result(context) 
 	end
 end
+

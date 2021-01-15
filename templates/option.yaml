@@ -1,6 +1,5 @@
 # if user not define domian, use default
-domain:
-        - domain
+domain: domain
 
 # each domain.xml these elements will be replace by default
 common:
@@ -12,8 +11,8 @@ common:
         - active
         - emulator
 
-# user-define
-user:
+# individual choic
+replaceable:
         - cpu
         - seclabel
         - disk

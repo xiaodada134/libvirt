@@ -1,6 +1,6 @@
 <interface type='bridge'>
   <source bridge='br0'/>
-  <mac address='<%= @mac %>'/>
+  <mac address='<%= mac.gsub('-', ':') %>'/>
   <target dev='vnet0'/>
   <model type='virtio'/>
 </interface>

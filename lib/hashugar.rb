@@ -59,6 +59,10 @@ class Hashugar
     @table[stringify(key)] = value
   end
 
+  def key?(key)
+	  @table.key?(key)
+  end
+
   def respond_to?(key, _include_all = false)
     super(key) || @table.key?(stringify(key))
   end
