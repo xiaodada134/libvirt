@@ -72,7 +72,10 @@ class Hashugar
   end
 
   def to_real_hash
-	  @table
+	  hash = @table.to_hash
+	  hash.each do |key, value|
+		  hash[key] = value.to_hash if value.is_a?(Hashugar)
+	  end
   end
 
   def to_hash
