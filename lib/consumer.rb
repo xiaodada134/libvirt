@@ -10,7 +10,6 @@ require_relative "#{ENV['CCI_SRC']}/container/defconfig"
 
 # configuration information of the test device
 class Consumer < Base
-	@@LKP_SRC = "#{ENV['LKP_SRC']}" || '/c/lkp-src'
 	attr_reader :info
 	
 	def initialize(hostname, queues)

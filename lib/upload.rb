@@ -34,4 +34,8 @@ class Upload
 	def upload_client_log
 		system "curl -sSf -T #{@logger.name} #{@result_url}/ --cookie 'JOBID= #{@job_id}'"
 	end
+
+	def upload_file(file)
+		system "curl -sSf -T #{file} #{@result_url}/ --cookie 'JOBID= #{@job_id}'"
+	end
 end

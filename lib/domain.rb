@@ -18,14 +18,12 @@ require_relative 'active'
 # 	TODO:user define cpu disk ...
 class Domain < Base
 	include Active
-	@@USER_DIR = "#{ENV['LKP_SRC']}/hosts"
-	@@option_file = "#{@@TEMPLATE_DIR}/option.yaml"
 
 	@doc = nil
 
 	def initialize(context)
 		@context = context
-		@option = Hashugar.new(YAML.load(File.read(@@option_file)))
+		@option = Hashugar.new(YAML.load(File.read(@@OPTION_FILE)))
 	end
 
 	def create_domain
@@ -44,6 +42,7 @@ class Domain < Base
 		File.open(filename, 'w') do |f|
 			f.puts @doc.to_xml
 		end
+		@upload.upload_file filename
 		File.realpath(filename)
 	end
 

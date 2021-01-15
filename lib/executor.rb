@@ -5,10 +5,7 @@ require_relative 'base'
 require_relative 'hashugar'
 
 class Executor < Base
-	@@CONFIG_FILE = "#{ENV['LKP_SRC']}" || '/c/lkp-src'
-	@@LOG_DIR = '/srv/cci/serial/logs'
-	
-	@config = nil
+	attr_reader :config	
 
 	def initialize(hostname, response)
 		@hostname = hostname
@@ -27,7 +24,7 @@ class Executor < Base
 
 	private
 	def set_log_file
-		@config.log_file = "#{@@LOG_DIR}/#{hostname}"
+		@config.log_file = "#{@@LOG_DIR}/#{@hostname}"
 	end
 
 	def set_qemu_path
