@@ -4,6 +4,9 @@ require 'logger'
 
 class Mylog < Logger
 	def initialize(filename)
+		if FileTest.exist?(filename)
+			File.delete(filename)
+		end
 		@name = filename
 		super(filename)
 		self.datetime_format = '%Y-%m-%d %H:%M:%s'
