@@ -60,6 +60,7 @@ module Active
 	end
 
 	def disk
+		@doc.xpath('//domain/devices')[0].add_child expand_erb("#{@@TEMPLATE_DIR}/disk.xml")
 	end
 
 	def devices
