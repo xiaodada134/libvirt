@@ -1,6 +1,6 @@
 # tool
 ```shell
-yum install libvirt
+yum install -y libvirt
 systemctl start libvirtd
 yum install -y  edk2-aarch64.noarch
 gem install erb
@@ -15,7 +15,7 @@ gem install ruby-libvirt
 1. define templates on your yaml
 job.yaml
 ```yaml
-templates:
+vt:
 	domain: xsw0112.xml
 ```
 
@@ -28,43 +28,47 @@ no need define templates on job.yaml
 # libvirt
 ---
 
-## start.rb
+## client.rb
 logger: define a log
-client: request job
-job: save configuration
-testbox: load file
-template: generate domain.xml
-upload: upload log file
-libvirt: create VM
+Consumer: request job
+Context: save configuration
+Executor: load file
+Domain: generate domain.xml
+Upload: upload log file
+Libvirt: create VM
 
 ## lib
 ---
 
 ### base.rb
-method_missing: set All instance variables are readable
-hash_to_instance_var: translate hash to obj
 set_logger: link a logger
+set_upload: link a upload
 
-### client.rb
-connect: config scheduler and register mac hostname and queues
+### consumer.rb
 request_job: request job based on mac
 
-### testbox.rb
+### executor.rb
 load: load kernel initrd file, parse $LKP_SRC/hosts/libvirt-2p16g
 
-### templates.rb
-final_template: base response generate domain.xml
+### domain.rb
+create_domain: base response generate domain.xml
 save: save to a file
 
-### job.rb
+### context.rb
 this class will save some vars
 	like: kernel initrd cmdline nr_cpu memory ...
-bind: translation a erb template file
+expand_erb: translation a erb template file
 
 ### upload.rb
-upload_file_curl: upload a file to result_root use curl command
-upload_rename_file: upload /var/log/libvirt/qemu/xxx.log
+upload_vm_log: upload vm boot log
+upload_qemu_log: upload /var/log/libvirt/qemu/xxx.log
+upload_client_log: upload program run log
 
 ### libvirt.rb
 create: based a xml file create a VM
 wait: wait the VM shutdown
+
+## templates
+
+option.yaml: define every template role
+
