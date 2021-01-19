@@ -69,16 +69,16 @@ class Domain < Base
 	def domain_option
 		@domain_option = "#{@@TEMPLATE_DIR}/#{@option.domain}.xml"
 		if user_domain?
-			@domain_option = "#{@@USER_DIR}/#{@context.config.templates.domain}"
+			@domain_option = "#{@@USER_DIR}/#{@context.info['templates']['domain']}"
 		end
 		@logger.debug("Domain: #{@domain_option}")
 	end
 
 	def user_domain?
-		if @context.config.templates.nil?
+		if @context.info['templates'].nil?
 			return false
 		end
-		if @context.config.templates.key?('domain')
+		if @context.info['templates'].key?('domain')
 			return true
 		else
 			return false

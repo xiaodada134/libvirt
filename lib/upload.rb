@@ -7,17 +7,16 @@ class Upload
 
 	def initialize(context, logger)
 		@logger = logger
-		@job_id = context.config.job_id
-		@boot_log_file = context.config.log_file
-		@result_root = context.config.result_root
-		@host   = context.config.LKP_SERVER
+		@job_id = context.info['job_id']
+		@boot_log_file = context.info['log_file']
+		@result_root = context.info['result_root']
+		@host   = context.info['LKP_SERVER']
 		@port   = 3080
 		get_result_url
 	end
 	
 	private def get_result_url
 		@result_url = "http://#{@host}:#{@port}#{@result_root}"
-		@logger.info("Result_URL: #{@result_url}".center(150))
 	end
 	
 	# /var/log/libvirt/qemu/xxx.log

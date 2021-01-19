@@ -3,7 +3,6 @@
 require 'set'
 require 'yaml'
 require 'json'
-require_relative 'hashugar'
 require_relative 'base'
 require_relative "#{ENV['CCI_SRC']}/container/defconfig"
 
@@ -13,12 +12,9 @@ class Consumer < Base
 	attr_reader :info
 	
 	def initialize(hostname, queues)
-		@info = Hashugar.new({})	
-		@info.hostname = hostname
-		@info.queues = queues
-
-		@info.hostname = hostname
-		@info.queues = queues
+		@info = {}	
+		@info['hostname'] = hostname
+		@info['queues'] = queues
 	end
 
 	def close
@@ -26,11 +22,11 @@ class Consumer < Base
 	end
 	
 	def request_job
-		get_mac_from_hostname(@info.hostname)
+		get_mac_from_hostname(@info['hostname'])
 		config_scheduler
 		set_host_info
 		host_exists
-		url = "http://#{@sched_host}:#{@sched_port}/boot.libvirt/mac/#{@info.mac}"
+		url = "http://#{@sched_host}:#{@sched_port}/boot.libvirt/mac/#{@info['mac']}"
 		@logger.info("Request URL: #{url}")
 		res = %x(curl #{url})
 		if res.empty?
@@ -54,26 +50,26 @@ class Consumer < Base
 
 	private def get_mac_from_hostname(hostname)
 		cmd = %Q(echo #{hostname} | md5sum | sed "s/^\\(..\\)\\(..\\)\\(..\\)\\(..\\)\\(..\\).*$/0a-\\1-\\2-\\3-\\4-\\5/")
-		@info.mac = %x(#{cmd}).chomp
-		@logger.info("Mac address: #{@info.mac}")
+		@info['mac'] = %x(#{cmd}).chomp
+		@logger.info("Mac address: #{@info['mac']}")
 	end
 
 	private def set_host_info
-		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/set_host_mac?hostname=#{@info.hostname}&mac=#{@info.mac}'"
-		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/set_host2queues?host=#{@info.hostname}&queues=#{@info.queues}'"
+		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/set_host_mac?hostname=#{@info['hostname']}&mac=#{@info['mac']}'"
+		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/set_host2queues?host=#{@info['hostname']}&queues=#{@info['queues']}'"
 	end
 
 	private def del_host_info
-		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/del_host_mac?mac=#{@info.mac}'"
-		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/del_host2queues?host=#{@info.hostname}'"
+		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/del_host_mac?mac=#{@info['mac']}'"
+		system "curl -X PUT 'http://#{@sched_host}:#{@sched_port}/del_host2queues?host=#{@info['hostname']}'"
 	end
 	
 	private def host_exists
-		@info.host = @info.hostname.split('.')[0]
-		host_file = "#{@@LKP_SRC}/hosts/#{@info.host}"
+		@info['host'] = @info['hostname'].split('.')[0]
+		host_file = "#{@@LKP_SRC}/hosts/#{@info['host']}"
 		unless FileTest.exists?(host_file)
-			@logger.error("#{@info.host} file not exist")
-			raise "#{@info.host} file not exist"
+			@logger.error("#{@info['host']} file not exist")
+			raise "#{@info['host']} file not exist"
 		end
 	end
 end

@@ -1,23 +1,23 @@
 #!/usr/bin/env ruby
 
 require 'erb'
-require_relative 'base'
 require_relative 'hashugar'
+require_relative 'base'
 
 class Context < Base
-	attr_reader :config
+	attr_reader :info
 
 	def initialize(response)
-		@config = Hashugar.new(response)
+		@info = response
 	end
 
-	def merge!(hashugar)
-		@config.merge!(hashugar)
+	def merge!(hash)
+		@info.merge!(hash)
 	end
 
 	def expand_erb(template, context_hash={})
-		@config.merge!(context_hash) 
-		context = @config.instance_eval { binding }
+		@info.merge!(context_hash) 
+		context = Hashugar.new(@info).instance_eval { binding }
 		ERB.new(template, nil, '%').result(context) 
 	end
 end
