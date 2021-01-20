@@ -46,11 +46,6 @@ class Hashugar
     end
   end
 
-  def merge!(target)
-	  hash = target.is_a?(Hashugar) ? target.to_real_hash : target
-	  @table.merge!(hash)
-  end
-
   def [](key)
     @table[stringify(key)]
   end
@@ -69,13 +64,6 @@ class Hashugar
 
   def each(&block)
     @table_with_original_keys.each(&block)
-  end
-
-  def to_real_hash
-	  hash = @table.to_hash
-	  hash.each do |key, value|
-		  hash[key] = value.to_hash if value.is_a?(Hashugar)
-	  end
   end
 
   def to_hash
